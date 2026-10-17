@@ -1,0 +1,77 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  unit:
+    name: tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run the test suite
+        run: python -B -m unittest discover -s tests -v
+
+  package:
+    # Installs the built package the way users do and drives the real command,
+    # including one hook call through the shell the runtime would use.
+    name: install and run (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - name: Build
+        run: uv build --out-dir dist
+      - name: Install with uv tool
+        run: |
+          uv tool install dist/*.whl
+          uv tool dir --bin >> "$GITHUB_PATH"
+      - name: Command works
+        run: |
+          context-guardian --help
+          context-guardian inspect-safety --command "npm test"
+          context-guardian inspect-safety --command "pytest & rm -rf ./src" | grep -q '"tier":"requires-approval"'
+      - name: Onboard a sample application and fire a hook
+        run: |
+          app="$RUNNER_TEMP/sample-app"
+          mkdir -p "$app/src/auth"
+          git init -q "$app"
+          printf 'export function login() {}\n' > "$app/src/auth/login.ts"
+          context-guardian bootstrap --project "$app"
+          grep -q '"context-guardian hook --runtime claude-code --event Stop"' "$app/.claude/settings.json"
+          cd "$app"
+          out=$(echo '{"session_id":"ci","prompt":"change login"}' | CLAUDE_PROJECT_DIR="$app" context-guardian hook --runtime claude-code --event UserPromptSubmit)
+          echo "$out"
+          ls "$app/.app-context/runs" | grep -q '^run-'
+      - name: Doctor
+        run: |
+          cd "$RUNNER_TEMP/sample-app"
+          context-guardian doctor

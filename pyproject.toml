@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "context-guardian-cli"
+version = "0.1.0"
+description = "Keeps coding agents inside an application's mapped features, invariants, and validation commands."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Careo Limited" }]
+keywords = ["agents", "claude-code", "codex", "gemini-cli", "skills", "code-map"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/CareoLimited/context-guardian"
+Issues = "https://github.com/CareoLimited/context-guardian/issues"
+
+[project.scripts]
+context-guardian = "context_guardian.scripts.context_guard:main"
+
+# The skill folder ships as-is: SKILL.md, references/ and scripts/ stay together,
+# so the installed package is also a complete, discoverable skill directory.
+[tool.hatch.build.targets.wheel]
+only-include = ["context-guardian"]
+exclude = ["__pycache__", "*.pyc"]
+
+[tool.hatch.build.targets.wheel.sources]
+"context-guardian" = "context_guardian"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["context-guardian", "tests", "docs", "pyproject.toml", "README.md", "LICENSE", ".gitignore"]
+exclude = ["__pycache__", "*.pyc"]
