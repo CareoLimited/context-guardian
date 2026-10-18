@@ -1,5 +1,10 @@
 # Context Guardian
 
+[![tests](https://github.com/CareoLimited/context-guardian/actions/workflows/test.yml/badge.svg)](https://github.com/CareoLimited/context-guardian/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/context-guardian-cli)](https://pypi.org/project/context-guardian-cli/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://pypi.org/project/context-guardian-cli/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://github.com/CareoLimited/context-guardian/blob/main/LICENSE)
+
 Keeps coding agents inside your application's map.
 
 <p align="center">

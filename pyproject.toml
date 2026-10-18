@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "context-guardian-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "Keeps coding agents inside an application's mapped features, invariants, and validation commands."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [{ name = "Careo Limited" }]
-keywords = ["agents", "claude-code", "codex", "gemini-cli", "skills", "code-map"]
+keywords = ["agents", "ai-agents", "claude-code", "codex", "gemini-cli", "cursor", "copilot", "skills", "code-map"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
