@@ -22,7 +22,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.3.0
       - name: Release tag must match the package version
         run: |
           version=$(sed -n 's/^version = "\(.*\)"/\1/p' pyproject.toml)
