@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="45%" r="55%">
+      <stop offset="0" stop-color="#1f6feb" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#1f6feb" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#30363d"/>
+    </pattern>
+  </defs>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .muted { fill: #9198a1; }
+    .edge { stroke: #484f58; stroke-width: 3; }
+  </style>
+
+  <rect width="1280" height="640" fill="#0d1117"/>
+  <rect width="1280" height="640" fill="url(#dots)"/>
+  <rect width="1280" height="640" fill="url(#glow)"/>
+
+  <!-- shield -->
+  <g transform="translate(112 150)">
+    <path d="M0 -40 L34 -26 V4 C34 28 18 42 0 50 C-18 42 -34 28 -34 4 V-26 Z" fill="#1f6feb"/>
+    <path d="M-14 4 L-4 14 L16 -8" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="168" y="172" font-size="64" font-weight="700">Context Guardian</text>
+
+  <text x="80" y="262" font-size="34" class="muted">Keeps coding agents inside</text>
+  <text x="80" y="306" font-size="34" class="muted">your application's map.</text>
+
+  <!-- three steps -->
+  <g font-size="24">
+    <circle cx="96" cy="370" r="16" fill="#1f6feb"/><text x="96" y="378" font-size="18" font-weight="700" text-anchor="middle">1</text>
+    <text x="126" y="378">Maps your features and rules</text>
+    <circle cx="96" cy="418" r="16" fill="#1f6feb"/><text x="96" y="426" font-size="18" font-weight="700" text-anchor="middle">2</text>
+    <text x="126" y="426">Checks every change against them</text>
+    <circle cx="96" cy="466" r="16" fill="#1f6feb"/><text x="96" y="474" font-size="18" font-weight="700" text-anchor="middle">3</text>
+    <text x="126" y="474">Tells the agent what it missed</text>
+  </g>
+
+  <!-- install -->
+  <rect x="80" y="520" width="600" height="56" rx="10" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+  <text x="104" y="556" font-size="23" class="mono"><tspan fill="#3fb950">$</tspan> uv tool install context-guardian-cli</text>
+
+  <!-- map illustration -->
+  <g>
+    <line class="edge" x1="900" y1="160" x2="1020" y2="250"/>
+    <line class="edge" x1="1020" y1="250" x2="900" y2="350"/>
+    <line class="edge" x1="1020" y1="250" x2="1140" y2="190"/>
+    <line class="edge" x1="1020" y1="250" x2="1130" y2="370"/>
+    <line class="edge" x1="900" y1="350" x2="990" y2="450"/>
+    <line class="edge" x1="1130" y1="370" x2="990" y2="450"/>
+
+    <circle cx="900" cy="160" r="26" fill="#161b22" stroke="#484f58" stroke-width="3"/>
+    <circle cx="1140" cy="190" r="26" fill="#161b22" stroke="#484f58" stroke-width="3"/>
+    <circle cx="990" cy="450" r="26" fill="#161b22" stroke="#484f58" stroke-width="3"/>
+
+    <circle cx="1020" cy="250" r="40" fill="#121d2f" stroke="#4493f8" stroke-width="4"/>
+    <text x="1020" y="258" font-size="22" font-weight="600" text-anchor="middle" fill="#4493f8">edit</text>
+
+    <circle cx="900" cy="350" r="32" fill="#272115" stroke="#d29922" stroke-width="4"/>
+    <text x="900" y="361" font-size="30" font-weight="700" text-anchor="middle" fill="#d29922">!</text>
+    <circle cx="1130" cy="370" r="32" fill="#272115" stroke="#d29922" stroke-width="4"/>
+    <text x="1130" y="381" font-size="30" font-weight="700" text-anchor="middle" fill="#d29922">!</text>
+  </g>
+  <text x="1020" y="540" font-size="20" class="muted" text-anchor="middle">Claude Code · Codex · Gemini CLI</text>
+  <text x="1020" y="570" font-size="20" class="muted" text-anchor="middle">Cursor · GitHub Copilot</text>
+</svg>
