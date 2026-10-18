@@ -1740,7 +1740,7 @@ class CommandSafetyTighteningTests(unittest.TestCase):
             with self.subTest(command=command):
                 self.assertEqual(context_guard.inspect_command_safety(command)["tier"], "safe")
         # Audit scripts may write reports; they need an explicit trusted entry.
-        for command in ("npm run deploy:prod", "npm run firebase:audit", "npx --yes"):
+        for command in ("npm run deploy:prod", "npm run data:audit", "npx --yes"):
             with self.subTest(command=command):
                 self.assertNotEqual(context_guard.inspect_command_safety(command)["tier"], "safe")
 
@@ -1750,29 +1750,29 @@ class CommandSafetyTighteningTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             profile = valid_profile()
-            profile["commands"]["trusted"] = ["node scripts/audit-platform.cjs", "node x.js && git push"]
+            profile["commands"]["trusted"] = ["node scripts/custom-check.cjs", "node x.js && git push"]
             context_guard.validate_profile(profile)
 
-            asked = context_guard.command_safety("node scripts/audit-platform.cjs", profile, project)
+            asked = context_guard.command_safety("node scripts/custom-check.cjs", profile, project)
             self.assertEqual(asked["tier"], "requires-approval")
             self.assertTrue(any("context-guardian trust" in r for r in asked["reasons"]), asked["reasons"])
 
-            context_guard.set_command_trust(project, "node scripts/audit-platform.cjs", True)
-            self.assertEqual(context_guard.command_safety("node scripts/audit-platform.cjs", profile, project)["tier"], "safe")
+            context_guard.set_command_trust(project, "node scripts/custom-check.cjs", True)
+            self.assertEqual(context_guard.command_safety("node scripts/custom-check.cjs", profile, project)["tier"], "safe")
             # Approval is per project and never stored in the repository.
             self.assertFalse(any(project.rglob("*.json")))
             with tempfile.TemporaryDirectory() as other:
                 self.assertEqual(
-                    context_guard.command_safety("node scripts/audit-platform.cjs", profile, Path(other))["tier"],
+                    context_guard.command_safety("node scripts/custom-check.cjs", profile, Path(other))["tier"],
                     "requires-approval",
                 )
             self.assertEqual(context_guard.command_safety("node x.js && git push", profile, project)["tier"], "disallowed")
             with self.assertRaises(context_guard.ProfileError):
                 context_guard.set_command_trust(project, "node x.js && git push", True)
 
-            context_guard.set_command_trust(project, "node scripts/audit-platform.cjs", False)
+            context_guard.set_command_trust(project, "node scripts/custom-check.cjs", False)
             self.assertEqual(
-                context_guard.command_safety("node scripts/audit-platform.cjs", profile, project)["tier"],
+                context_guard.command_safety("node scripts/custom-check.cjs", profile, project)["tier"],
                 "requires-approval",
             )
 

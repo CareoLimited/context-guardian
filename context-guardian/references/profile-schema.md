@@ -69,7 +69,7 @@ Optional feature fields:
 - `commands.full`: broader checks for risky edits and release preparation.
 - `commands.trusted`: exact command strings the team *asks* to have run without
   approval, for project-specific checks no generic rule can recognise (for example
-  `node scripts/audit-platform.cjs`). Because anyone who can change the repository can
+  `node scripts/custom-check.cjs`). Because anyone who can change the repository can
   change this list, it grants nothing by itself: each person approves a listed command on
   their own machine with `context-guardian trust --project . --command "<cmd>"`, which is
   stored in their user configuration, never in the repository. A command that matches a

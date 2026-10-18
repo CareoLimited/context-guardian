@@ -207,7 +207,7 @@ class RuntimeConnectorTests(unittest.TestCase):
                         "code": "unsynchronized-platform-twin",
                         "severity": "warning",
                         "message": "iOS twin changed without its Android counterpart",
-                        "paths": ["ios_ayri/src/Twin.ts"],
+                        "paths": ["ios/src/Twin.ts"],
                         "action": "Synchronize the counterpart.",
                     }
                 ],
