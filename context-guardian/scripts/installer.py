@@ -88,6 +88,13 @@ def _is_installed_package_dir(path: Path) -> bool:
     )
 
 
+def _same_directory(a: Path, b: Path) -> bool:
+    try:
+        return a == b.resolve() or os.path.samefile(a, b)
+    except OSError:
+        return False
+
+
 def inspect_entry(entry: Path, package_root: Path) -> dict[str, Any]:
     """Classify `<agent skills>/context-guardian`.
 
@@ -96,13 +103,14 @@ def inspect_entry(entry: Path, package_root: Path) -> dict[str, Any]:
     this tool did not create; never touched).
     """
     if entry.is_symlink():
-        raw = Path(os.readlink(entry))
-        target = raw if raw.is_absolute() else (entry.parent / raw)
+        # Resolve the entry itself: on Windows os.readlink returns a `\\?\`
+        # path that never compares equal to an ordinary resolved path.
         try:
-            resolved = target.resolve()
+            resolved = entry.resolve()
         except OSError:
-            resolved = target
-        if resolved == package_root.resolve():
+            raw = Path(os.readlink(entry))
+            resolved = raw if raw.is_absolute() else (entry.parent / raw)
+        if _same_directory(resolved, package_root):
             return {"state": "current", "kind": "link", "target": str(resolved)}
         if _is_installed_package_dir(resolved):
             return {"state": "stale", "kind": "link", "target": str(resolved)}
@@ -429,7 +437,8 @@ def _public(steps: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def _confirm(args: argparse.Namespace, out: list[str]) -> bool:
     if args.yes:
         return True
-    if args.json or not sys.stdin.isatty():
+    # Both ends must be a terminal: Windows reports the NUL device as a tty.
+    if args.json or not (sys.stdin.isatty() and sys.stdout.isatty()):
         out.append("Nothing changed. Re-run with --yes to apply, or --dry-run to only preview.")
         return False
     print("\n".join(out))
