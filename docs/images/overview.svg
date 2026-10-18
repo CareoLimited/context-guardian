@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="960" height="460" role="img" aria-labelledby="t d">
+  <title id="t">How Context Guardian checks an agent's change</title>
+  <desc id="d">An agent edits src/checkout/pay.ts. Context Guardian looks up its application map, finds that src/profile/settings.ts imports the changed code, and tells the agent to read the checkout and profile notes and the product invariants, and which commands are safe to run.</desc>
+  <style>
+    svg { --bg:#ffffff; --card:#f6f8fa; --line:#d0d7de; --text:#1f2328; --muted:#59636e;
+          --blue:#0969da; --blue-bg:#ddf4ff; --green:#1a7f37; --green-bg:#dafbe1;
+          --red:#cf222e; --red-bg:#ffebe9; --amber:#9a6700; --amber-bg:#fff8c5; }
+    @media (prefers-color-scheme: dark) {
+      svg { --bg:#0d1117; --card:#161b22; --line:#30363d; --text:#e6edf3; --muted:#9198a1;
+            --blue:#4493f8; --blue-bg:#121d2f; --green:#3fb950; --green-bg:#12261e;
+            --red:#f85149; --red-bg:#25171c; --amber:#d29922; --amber-bg:#272115; }
+    }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: var(--text); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .muted { fill: var(--muted); }
+    .h1 { font-size: 22px; font-weight: 600; }
+    .sub { font-size: 14px; }
+    .step { font-size: 12px; font-weight: 600; letter-spacing: .06em; fill: var(--muted); }
+    .head { font-size: 16px; font-weight: 600; }
+    .body { font-size: 13px; }
+    .code { font-size: 13px; }
+    .small { font-size: 12px; }
+    .frame { fill: var(--bg); stroke: var(--line); }
+    .card { fill: var(--card); stroke: var(--line); }
+    .box { fill: var(--bg); stroke: var(--line); }
+    .arrow { stroke: var(--muted); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <rect class="frame" x="0.5" y="0.5" width="959" height="459" rx="12"/>
+  <text class="h1" x="32" y="48">One file changed. Context Guardian shows what else it touches.</text>
+  <text class="sub muted" x="32" y="74">A real run on a small sample app: the agent was asked to allow zero-amount payments.</text>
+
+  <!-- 1. The agent edits -->
+  <rect class="card" x="24" y="100" width="280" height="336" rx="10"/>
+  <text class="step" x="44" y="128">STEP 1</text>
+  <text class="head" x="44" y="150">The agent edits one file</text>
+  <rect class="box" x="44" y="166" width="240" height="104" rx="6"/>
+  <text class="mono small muted" x="56" y="188">src/checkout/pay.ts</text>
+  <rect x="45" y="200" width="238" height="26" fill="var(--red-bg)"/>
+  <text class="mono code" x="56" y="218"><tspan fill="var(--red)">-</tspan>  return amount &gt; 0;</text>
+  <rect x="45" y="230" width="238" height="26" fill="var(--green-bg)"/>
+  <text class="mono code" x="56" y="248"><tspan fill="var(--green)">+</tspan>  return amount &gt;= 0;</text>
+  <text class="body" x="44" y="306">The diff looks finished.</text>
+  <text class="body muted" x="44" y="328">But other code depends on pay(),</text>
+  <text class="body muted" x="44" y="348">and the agent never opened it.</text>
+
+  <path class="arrow" d="M312 268 h20 M324 260 l8 8 l-8 8"/>
+
+  <!-- 2. It checks the map -->
+  <rect class="card" x="340" y="100" width="280" height="336" rx="10"/>
+  <text class="step" x="360" y="128">STEP 2</text>
+  <text class="head" x="360" y="150">It checks the app's map</text>
+  <rect class="box" x="360" y="166" width="240" height="62" rx="6" stroke="var(--blue)"/>
+  <text class="mono code" x="374" y="192">src/checkout/pay.ts</text>
+  <rect x="374" y="202" width="128" height="18" rx="9" fill="var(--blue-bg)"/>
+  <text class="small" x="384" y="215" fill="var(--blue)">checkout · changed</text>
+  <path class="arrow" d="M480 236 v28 M473 257 l7 7 l7 -7"/>
+  <text class="small muted" x="492" y="255">imported by</text>
+  <rect class="box" x="360" y="272" width="240" height="62" rx="6" stroke="var(--amber)"/>
+  <text class="mono code" x="374" y="298">src/profile/settings.ts</text>
+  <rect x="374" y="308" width="196" height="18" rx="9" fill="var(--amber-bg)"/>
+  <text class="small" x="384" y="321" fill="var(--amber)">profile · affected via saveCard()</text>
+  <text class="body muted" x="360" y="378">Local and deterministic:</text>
+  <text class="body muted" x="360" y="398">no model calls, no network.</text>
+
+  <path class="arrow" d="M628 268 h20 M640 260 l8 8 l-8 8"/>
+
+  <!-- 3. It tells the agent -->
+  <rect class="card" x="656" y="100" width="280" height="336" rx="10"/>
+  <text class="step" x="676" y="128">STEP 3</text>
+  <text class="head" x="676" y="150">It tells the agent</text>
+  <text class="body" x="676" y="182">Read before finishing</text>
+  <text class="mono small muted" x="676" y="204">.app-context/</text>
+  <text class="mono small" x="692" y="224">features/checkout.md</text>
+  <text class="mono small" x="692" y="244">features/profile.md</text>
+  <text class="mono small" x="692" y="264">invariants/product.md</text>
+  <text class="body" x="676" y="304">Commands</text>
+  <text class="mono small" x="676" y="330">npm run typecheck</text>
+  <rect x="842" y="317" width="74" height="18" rx="9" fill="var(--green-bg)"/>
+  <text class="small" x="879" y="330" text-anchor="middle" fill="var(--green)">safe</text>
+  <text class="mono small" x="676" y="360">git push</text>
+  <rect x="842" y="347" width="74" height="18" rx="9" fill="var(--red-bg)"/>
+  <text class="small" x="879" y="360" text-anchor="middle" fill="var(--red)">disallowed</text>
+  <text class="body muted" x="676" y="400">Safe checks may run unasked;</text>
+  <text class="body muted" x="676" y="420">pushing is always blocked.</text>
+</svg>

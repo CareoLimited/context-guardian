@@ -2,6 +2,10 @@
 
 Keeps coding agents inside your application's map.
 
+<p align="center">
+  <img src="docs/images/overview.svg" width="880" alt="An agent edits src/checkout/pay.ts; Context Guardian finds that src/profile/settings.ts imports it and tells the agent which notes to read and which commands are safe to run.">
+</p>
+
 Before an agent edits, Context Guardian tells it which features, invariants, and checks a
 task touches. When the agent finishes, it compares what changed against that map and
 reports what the agent missed: a feature that imports the code it changed, a platform
